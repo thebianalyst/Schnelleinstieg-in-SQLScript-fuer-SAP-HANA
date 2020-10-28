@@ -1,0 +1,1 @@
+# Schnelleinstieg-in-SQLScript-f-r-SAP-HANA
