@@ -1,1 +1,1 @@
-# Schnelleinstieg-in-SQLScript-f-r-SAP-HANA
+# Schnelleinstieg-in-SQLScript-für-SAP-HANA
