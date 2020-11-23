@@ -1,0 +1,9 @@
+--Nested function für Aufruf in Prozedur
+CREATE FUNCTION get_days( 
+IN first_d date, IN second_d date )
+
+RETURNS num_days bigint 
+AS
+BEGIN
+      num_days =  days_between (:first_d,:second_d  );
+END;
