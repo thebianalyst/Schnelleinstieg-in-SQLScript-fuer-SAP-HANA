@@ -1,0 +1,9 @@
+FUNCTION " MY_SCALAR_FUNCTION" (in i_input int, in i_multi integer ) 
+
+    RETURNS o_result int –Rückgabe der Funktion
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER AS
+BEGIN
+/*******Logik Beginn**********/
+ o_result := :i_input * :i_multi; --Ergebnis der Multiplikation
+END;
