@@ -1,0 +1,9 @@
+loop at SOURCE_PACKAGE   assigning <source_fields> 
+«Wenn gewünschter Wert gefunden Verändere Wert
+         If <source_fields>- CALDAY = '11000101'.
+         
+         <source_fields>-CALDAY = '20200821'
+         Else.
+         <source_fields>-CALDAY = sy-datum.
+         Endif.
+endloop 
