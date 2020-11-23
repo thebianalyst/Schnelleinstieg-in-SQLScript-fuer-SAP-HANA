@@ -1,0 +1,39 @@
+--Perioden / Monate zwischen von- bis Datum
+CREATE FUNCTION "MY_PERIODS_IN_BETWEEN" (
+	            IN i_START_PER VARCHAR(10), IN i_END_PER VARCHAR(10))
+                RETURNS RESULT VARCHAR(255)
+                LANGUAGE SQLSCRIPT
+                SQL SECURITY INVOKER
+                 AS
+BEGIN
+ 
+                DECLARE v_temp VARCHAR(255); --je nach Rückgabe!
+                DECLARE v_val VARCHAR(10); 
+                DECLARE i_mon_idx INT;
+                DECLARE iCount_Month INT := 0; 
+                                
+                iCount_Month := MONTHS_BETWEEN(TO_DATE(i_START_PER,'YYYYMM'), TO_DATE(i_END_PER,'YYYYMM')); --Anzahl der Perioden
+                
+                v_temp := ''''; 
+                v_val := i_START_PER; 
+                
+                FOR i_mon_idx IN 0..iCount_Month DO
+                                IF :i_mon_idx = 0
+                                THEN 
+                                                IF :i_mon_idx = :iCount_Month
+                                                THEN 
+                                                                v_temp := ''''||:i_START_PER ||',';
+                                                ELSE 
+                                                                v_temp := :i_START_PER||',';
+                                                END IF;                                
+                                ELSEIF :i_mon_idx = iCount_Month
+                                THEN 
+                                                v_temp := :v_temp||:i_END_PER;
+                                ELSE 
+                                                v_val :=  to_varchar(ADD_MONTHS(TO_DATE (i_START_PER,'YYYYMM'), i_mon_idx),'YYYYMM') ;             
+                                                v_temp := :v_temp||:v_val||',';
+                                END IF; 
+                END FOR; 
+ 
+                result := :v_temp;
+END;
