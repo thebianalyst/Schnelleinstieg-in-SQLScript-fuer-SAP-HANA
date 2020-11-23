@@ -1,0 +1,17 @@
+--Beispiel einer Namens Funktion
+CREATE FUNCTION GET_FULL_NAME (
+          IN ip_vorname NVARCHAR(50) ,
+          IN ip_trennzeichen NVARCHAR(50) ,
+          IN ip_nachname NVARCHAR(50)
+          )
+			RETURNS op_fullname NVARCHAR(256)
+	LANGUAGE sqlscript  
+	SQL SECURITY INVOKER 
+    AS
+	BEGIN
+		IF :ip_trennzeichen IS NULL THEN
+ 				op_fullname = :ip_nachname || '** ' || :ip_vorname;
+		ELSE
+ 				op_fullname = :ip_nachname || :ip_trennzeichen ||    :ip_vorname ;
+		END IF;	
+END;
