@@ -1,0 +1,7 @@
+outtab =
+select ( case CALDAY
+          when '20191119' THEN '20200821'
+          else to_varchar( CURRENT_DATE, 'YYYYMMDD' )
+         end) as CALDAY,
+      TCTREQUID, TCTIFCUBE, TCTRQCSTA, TCTRQSTRNO, TIME, 	TCTSYSID, TCTOBJVERS, TCTRECBST, TCTMNRECO, RECORD, 	RECORDTP,  SQL__PROCEDURE__SOURCE__RECORD
+       from :intab;
