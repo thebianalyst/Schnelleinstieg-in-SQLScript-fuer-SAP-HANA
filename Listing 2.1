@@ -1,0 +1,13 @@
+--Funktion Rumpfprogramm
+CREATE FUNCTION MEIN_SCHEMA.GET_MY_NAME (
+          IN ip_MEIN_INPUT NVARCHAR(50) ,
+          )
+	RETURNS op_MEINOUTPUT NVARCHAR(256)
+	LANGUAGE sqlscript  
+	SQL SECURITY INVOKER 
+	READ SQL DATA AS – oder nur AS
+	
+BEGIN
+--Hier steht Ihr Coding
+		
+END;
