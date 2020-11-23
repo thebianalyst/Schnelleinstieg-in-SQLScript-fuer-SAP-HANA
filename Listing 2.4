@@ -1,0 +1,32 @@
+--Suchen und Ersetzen (SEARCH_MYSTRING)
+--Erstellung String Search & Replace function
+create function SERACH_MY_STRING (IN IP_STR varchar(200) ) 
+        returns OP_str varchar(200)
+language sqlscript   
+as   
+begin   
+declare temp_str varchar(200) := ip_str ;   
+
+    -- ersetze jeden wert von 10 durch IT
+    temp_str := replace (:temp_str, '10', ',IT,');
+
+    -- ersetze jeden wert von 20 durch US
+    temp_str := replace (:temp_str, '20', ',US,');
+
+    -- ersetze jeden wert von 33 durch DE
+    temp_str := replace (:temp_str, '33', ',DE,');
+    
+        -- entferne doppelte Komas
+    temp_str := replace (:temp_str, ',,', ',');
+
+    -- entferne nachfolgende Kommas
+    if (right (:temp_str, 1) = ',' ) then
+        temp_str =  left (:temp_str, length(:temp_str) -1 );
+    end if;
+        -- entferne führende Kommas
+    if (left (:temp_str, 1) = ',' ) then
+        temp_str =  right (:temp_str , length(:temp_str ) -1 );
+    end if;
+
+    op_str :=  :temp_str;
+end;
