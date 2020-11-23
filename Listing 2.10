@@ -1,0 +1,3 @@
+DECLARE EXIT HANDLER FOR SQLEXCEPTION
+BEGIN
+pex_message := 'SQL Exception occured. Error Code is: ' || ::SQL_ERROR_CODE || ' Error message is: ' || ::SQL_ERROR_MESSAGE;
