@@ -1,0 +1,11 @@
+--Einige Windows Funktionen
+select Land, "Alter", offset,
+  ROW_NUMBER() over (partition by Land order by "Alter" asc) as "Zeilennummer",
+  PERCENT_RANK() OVER (ORDER BY "Alter" ASC)   as "Durchscnitt in%",
+  RANK() over (partition by Land,"Alter" order by offset desc) as "Ranking",  
+  DENSE_RANK() over (partition by Land order by "Alter") as "Ranking Ohne Gaps",
+  LEAD("Alter") over (partition by Land order by "Alter") as "Nachfolger",
+  LEAD("Alter",offset,-"Alter") over (partition by Land order by "Alter") as"Nachfolger über Offset",
+  LAG("Alter") over (partition by Land order by "Alter") as "Vorgänger",
+  LAG("Alter",offset,-"Alter") over (partition by Land order by "Alter") as "Vorgänger über Offset"
+ from WIND_FUNC
