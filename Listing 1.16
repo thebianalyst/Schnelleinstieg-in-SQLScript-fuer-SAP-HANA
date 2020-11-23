@@ -1,0 +1,2 @@
+select UID, DATUM, PID, sum(VK_WERT_LOC)
+from SALES group by grouping sets MULTIPLE RESULTSETS ( (UID, DATUM), (PID) )
