@@ -1,0 +1,4 @@
+@Analytics: {dataCategory: #FACT,dataExtraction.enabled: true}
+@Analytics.dataExtraction.delta.byElement.name: 'lastChangedAt'
+@Analytics.dataExtraction.delta.byElement.maxDelayInSeconds: 100
+@Analytics.dataExtraction.delta.byElement.detectDeletedRecords: true
