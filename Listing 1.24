@@ -1,0 +1,7 @@
+SELECT node_id
+ FROM HIERARCHY ( SOURCE ( SELECT id AS node_id, parent AS parent_id FROM Hierarchie_demo )
+                  START WHERE id = 'A1'
+                  DEPTH 2
+                   ORPHAN IGNORE )
+ WHERE hierarchy_level > 1
+ ORDER BY node_id;
