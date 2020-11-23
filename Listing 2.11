@@ -1,0 +1,58 @@
+--Dynamische Monatsende Ermittlung
+PROCEDURE "MY_GET_MONTH_END" (IN P_DATUM char(8), OUT P_DATUMABSCHLUSS date) 
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+       DEFAULT SCHEMA "MEIN_SCHEMA"
+   READS SQL DATA AS
+BEGIN
+
+/***************************** 
+       Write your procedure logic 
+ *****************************/
+
+DECLARE lv_datum_heute date ;
+DECLARE lv_datum date ;
+DECLARE lv_datum_erster date ;
+DECLARE lv_datum_letzer date ;
+DECLARE lv_datum_grenze date ;
+DECLARE lv_datum_letzter_am date ;
+DECLARE lv_datum_letzter_vm date ;
+DECLARE lv_datum_abschluss date ;
+
+/* 
+  Eingabedatum in internes Format umwandeln
+*/
+SELECT TO_DATE(P_DATUM, 'YYYYMMDD') into lv_datum_heute FROM DUMMY;
+
+/*
+  Ermitteln innerhalb der Prozedur von:
+  - letzten Tag des aktuellen Monats
+  - ersten Tag des aktuellen Monats
+  - das Grenzdatum für den aktuellen Monatsabschluss
+  - letzten Tag des aktuellen Monats
+  - letzter Tag des Vormonats
+*/ 
+
+SELECT LAST_DAY (lv_datum_heute) into lv_datum_letzer FROM DUMMY;
+SELECT ADD_MONTHS (lv_datum_heute, -1) into lv_datum FROM DUMMY;
+SELECT ADD_DAYS (LAST_DAY (lv_datum), +1) into lv_datum_erster FROM DUMMY;
+SELECT ADD_DAYS (lv_datum_letzer, -3) into lv_datum_grenze FROM DUMMY;
+SELECT LAST_DAY (lv_datum_heute) into lv_datum_letzter_am FROM DUMMY;
+SELECT LAST_DAY (ADD_MONTHS (lv_datum_letzter_am, -1)) into lv_datum_letzter_vm FROM DUMMY;
+
+/*
+  Prüfen, welchen Monatsabschlußdatum genutzt werden soll
+  Vom 01. bis kleiner des Grenzdatum sind wir im Vormonat,
+   sonst, vom Grenzdatum an sind wir im aktuellen Monat
+*/
+if  lv_datum_heute >= lv_datum_erster
+and lv_datum_heute < lv_datum_grenze
+then
+lv_datum_abschluss := lv_datum_letzter_vm ;
+else
+lv_datum_abschluss := lv_datum_letzter_am ;
+end if ;
+
+P_DATUMABSCHLUSS := lv_datum_abschluss ;
+
+END;
