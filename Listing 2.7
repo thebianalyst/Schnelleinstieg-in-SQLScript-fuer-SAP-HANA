@@ -1,0 +1,11 @@
+--Procedure ruft nested function
+CREATE PROCEDURE get_day_between
+( IN first_d date,
+IN second_d date,
+out count_days bigint
+) 
+AS
+BEGIN
+count_days = get_days (:first_d, :second_d);
+
+END;
