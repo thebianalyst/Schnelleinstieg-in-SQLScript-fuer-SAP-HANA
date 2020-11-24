@@ -1,0 +1,8 @@
+--SQLScript für SQL Security Überprüfung
+Select p.schema_name, p.procedure_name, p.sql_security as "Proc_SEC",f.function_name, f.sql_security as "Func_SEC"
+from sys.procedures as p
+join
+sys.functions as f
+on p.schema_name = f.schema_name
+
+Where p.sql_security = 'DEFINER'
