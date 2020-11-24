@@ -1,0 +1,45 @@
+--Procedure für Performance Test
+CREATE PROCEDURE "CHECK PERFORMANCE" ()
+
+LANGUAGE SQLSCRIPT SQL 
+SECURITY INVOKER 
+
+--DEFAULT SCHEMA "MY_SCHEMA"
+ AS
+BEGIN
+/***************************** 
+	Set Default Session Client = '002' to all available users 
+ *****************************/
+DECLARE LV_UID_COUNT integer;
+DECLARE LV_SQL VARCHAR(299);
+DECLARE LV_LAND varchar(30);
+DECLARE LV_UID varchar(30);
+DECLARE I Integer;
+ 
+ --Anzahl der Anwender / User für den Loop
+SELECT COUNT(*) INTO LV_UID_COUNT FROM "KUNDE";
+
+--Auslesen aller User für die Bearbeitung
+t1= select UID,LAND from "KUNDE";
+       --Loop von 1 bis Anzahl der User
+       FOR i IN 0 .. :LV_UID_COUNT-1 DO  -- Loop Beginn
+         
+           SELECT "UID"
+           INTO LV_UID
+           FROM :T1
+           LIMIT 1 OFFSET :i; -- Info OFFSET indexes beginnen mit 0, nicht 1
+
+           SELECT "LAND"
+           INTO LV_LAND
+           FROM :T1
+           LIMIT 1 OFFSET :i; 
+
+if :LV_LAND = 'DE' THEN
+--Aufbau des Dynamischen SQLScript (Siehe auch Kapitel Performance :) )
+       LV_SQL := 'UPDATE KUNDE SET LAND = ''NL'' WHERE UID =''' || LV_UID ||  '''' ;
+     --update  der User Parameter des einzelnen Loop Users via Dynamischem EXEC SQL 
+       EXEC (:LV_SQL); 
+END IF;           
+END FOR;  -- Ende des Loops
+	 
+END;
