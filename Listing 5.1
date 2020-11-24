@@ -1,0 +1,18 @@
+CREATE COLUMN TABLE MY_TAB1(A INT);
+CREATE COLUMN TABLE MY_TAB2(A INT);
+CREATE COLUMN TABLE MY_TAB3(A INT);
+CREATE COLUMN TABLE MY_TAB4(A INT);
+CREATE COLUMN TABLE MY_TAB5(A INT);
+
+
+--Prozedur mit Parallel Ausführung
+CREATE PROCEDURE MY_Parallel_Update AS
+BEGIN
+   -- BEGIN PARALLEL EXECUTION
+      UPDATE MY_TAB1 SET A = to_integer((select count(*) from SALES));
+      UPDATE MY_TAB2 SET A = (select count(*) from SALES);
+      UPDATE MY_TAB3 SET A = (select count(*) from SALES);
+      UPDATE MY_TAB4 SET A = (select count(*) from SALES);
+      UPDATE MY_TAB5 SET A = (select count(*) from SALES);
+   -- END;
+END;
