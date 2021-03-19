@@ -1,80 +1,15 @@
---Analyse von ABAP Code in SAP BW Transformationen mit Table Function MY_TABLE_FUNCTION
-FUNCTION "MEIN_SCHEMA"."MEIN_PAKET::MY_TABLE_FUNCTION" ( 
-IN LV_IOBJ NVARCHAR (72), --gesuchtes Objekt z. B. DSO Name
-IN LV_TRFN NVARCHAR (32),  --gesuchte Transformation
-IN LV_IN_TRFN NVARCHAR (1)) – Soll nur in TRFN gesucht werden
---Deklaration der Rückgabe Tabelle
-RETURNS TABLE (
-"TRANID" NVARCHAR (32),
- "STARTROUTINE" NVARCHAR (25),
- "ENDROUTINE" NVARCHAR (25),
- "EXPERT" NVARCHAR (25),
- "CODEID" NVARCHAR (25),
- "LINE" NVARCHAR (72),
- "LINE_NO" NVARCHAR (6),
- "COUNTER" BIGINT
- )
-       
-LANGUAGE SQLSCRIPT
-SQL SECURITY INVOKER
-DEFAULT SCHEMA LHT_OBJECTS AS 
+FUNCTION "MEIN_SCHEMA"."MEIN_PAKET"."MEIN_TABLE_FUNCTION_NAME" 
+(
+in i_MEIN_PARAM1 NVARCHAR(3)
+out o_MEIN_PARAM2 NVARCHAR(3)
+) RETURNS TABLE (FELD1 INT, FELD2 INT) --Ihre Tabelle
 
- BEGIN 
- 
-/***************************** 
-    Get Source code for TRFN from RSAABAP tables
- *****************************/
---Wildcard für LIKE Vergleich unten im Code
-LV_IOBJ := '%' ||LV_IOBJ|| '%'; 
+LANGUAGE SQLSCRIPT SQL 
+SECURITY INVOKER --wird mit der Berechtigung des Ausführenden aufgerufen
 
---Abfrage ob Transformation oder Objekt
-if LV_IN_TRFN = 'X' THEN
+DEFAULT SCHEMA "MEIN_SCHEMA"
+   READS SQL DATA AS
+BEGIN
+--Ab hier kommt Ihr Coding für die Funktionalität
 
-return –Rückgabe der Werte in Tabellenform
-
-     select   
-        TRFN."TRANID"                as "TRANID" , 
-        TRFN."STARTROUTINE" as "STARTROUTINE", 
-        TRFN."ENDROUTINE"    as "ENDROUTINE" , 
-        TRFN."EXPERT"             as "EXPERT" , 
-        CODE."CODEID"             as "CODEID" , 
-        CODE."LINE"                  as "LINE", 
-        CODE."LINE_NO"           as "LINE_NO",
-        TRFN."VERSION_CUR"  as "COUNTER" 
-        
-    from  "RSTRAN"   as "TRFN" – Tabelle aller Transformationen
-      INNER JOIN   "RSAABAP"  as "CODE" –Tabelle ABAP Code
-        on
-            CODE."CODEID" = TRFN."STARTROUTINE" or
-            CODE."CODEID" = TRFN."ENDROUTINE"  or
-            CODE."CODEID" = TRFN."EXPERT"
-    
-        WHERE  TRFN."OBJVERS"  = 'A'
-              and CODE."LINE" like LV_IOBJ  
-              and TRFN."TRANID" like LV_TRFN;
-
-else 
-
-return 
-     select   
-        TRFN."TRANID"                as "TRANID" , 
-        TRFN."STARTROUTINE" as "STARTROUTINE", 
-        TRFN."ENDROUTINE"    as "ENDROUTINE" , 
-        TRFN."EXPERT"             as "EXPERT" , 
-        CODE."CODEID"             as "CODEID" , 
-        CODE."LINE"                   as "LINE", 
-        CODE."LINE_NO"           as "LINE_NO",
-        TRFN."VERSION_CUR"  as "COUNTER" 
-        
-    from  "RSAABAP"  as "CODE" 
-      LEFT OUTER JOIN   "RSTRAN"   as "TRFN"
-        on
-            CODE."CODEID" = TRFN."STARTROUTINE" or
-            CODE."CODEID" = TRFN."ENDROUTINE"  or
-            CODE."CODEID" = TRFN."EXPERT"
-    
-        WHERE  CODE."OBJVERS"  = 'A'
-              and CODE."LINE" like LV_IOBJ  ;
-          
- end if;
 END;
