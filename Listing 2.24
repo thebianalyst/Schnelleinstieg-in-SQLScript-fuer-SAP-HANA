@@ -1,0 +1,24 @@
+METHOD PROCEDURE BY DATABASE PROCEDURE FOR HDB LANGUAGE SQLSCRIPT OPTIONS READ-ONLY .
+
+declare lv_count_intab bigint;
+declare i bigint;
+--Ab HANA 2.0 könnte auch die Begrenzung der Anzahl mit RECORD_COUNT( :INTAB ) erfolgen
+select count( * ) into lv_count_intab from :intab;
+
+        --for i IN 0 .. :lv_count_intab-1 DO  --Loop Beginn
+        for i IN 0 .. 2-1 DO  --Loop Beginn
+         IT_result =
+           SELECT *
+           FROM :INTAB
+           LIMIT 1 OFFSET :i; --Info: OFFSET indexes beginnen mit 0, nicht 1
+--Mache etwas mit den Daten von IT_RESULT, dann append an evtl. 2. interne Tabelle oder OUTTAB
+--Das ganze Konstrukt ist ABER NICHT WIRKLICH HANA-KONFORM!!!
+
+       END FOR;
+
+
+outtab = Select * from :it_result;
+
+ERRORTAB = SELECT '' AS ERROR_TEXT, '' AS SQL__PROCEDURE__SOURCE__RECORD FROM DUMMY WHERE DUMMY <> 'X';
+ENDMETHOD.
+ENDCLASS.
