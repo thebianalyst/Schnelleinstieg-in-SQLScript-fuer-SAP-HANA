@@ -1,5 +1,23 @@
+--Dynamische virtuelle Tabellen werden erst (automatisch) gelöscht, wenn Session beendet wird
+drop table "#G1";  --klappt nicht
+drop table "MY_SCHEMA"."#G1"; --klappt auch nicht 
+--Die Löschung erfolgt automatisch, wenn Sie die Session in ECLIPSE schließen. Versuchen Sie es einmal!
+
 select UID, DATUM, PID, sum(VK_WERT_LOC)
      from SALES
+     --Option 1 => nur #GN1 und #GN2
             group by grouping sets STRUCTURED RESULT
+     --Option 2 => #GN0, #GN1 und #GN2
+            --group by grouping sets STRUCTURED RESULT WITH OVERVIEW 
+     --Option 3 =
+            --group by grouping sets STRUCTURED RESULT WITH OVERVIEW PREFIX '#MY_INT_TAB'
      (
-      (UID, DATUM), (PID) );
+      (UID, DATUM),
+      (PID)
+     );
+
+select * from "#GN0";
+select * from "#GN1";
+select * from "#GN2";
+Select * from "#MY_INT_TAB"
+
