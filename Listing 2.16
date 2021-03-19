@@ -1,29 +1,36 @@
---MULTIPLE_VAR_INLIST
-CREATE FUNCTION "MULTIPLE_VAR_INLIST"(str_input nvarchar(5000), 
-delimiter nvarchar(10)) 
-RETURNS table ( VAR_LIST NVARCHAR(10) ) 
+--Table Function für multiple Werte aus SALES-Daten
+FUNCTION " MY_TABLE_FUNCTION" ( 
+IN IP_MEIN_KUNDE nvarchar(5000)
+)
 
-LANGUAGE SQLSCRIPT SQL SECURITY INVOKER AS
-/********* Begin Function Script ************/
---baut auf Input String mit Seperator eine Rückgabe-Tabelle für Prozeduren, Table Functions etc.
+RETURNS TABLE (
+SID INTEGER,
+KUNDE INTEGER,
+PID INTEGER,
+VK_WERT_BILL DECIMAL(15,2)
+)
+       
+LANGUAGE SQLSCRIPT
+SQL SECURITY INVOKER
+DEFAULT SCHEMA MY_SCHEMA 
+AS 
+
+
 BEGIN
-    DECLARE cnt int;
-    DECLARE temp_input nvarchar(128);
-    DECLARE slice NVARCHAR(10) ARRAY;
-    
-    temp_input = :str_input;
-    cnt = 1;
---läuft über den String, bis der letzte Wert in Tabelle aufgelöst ist
-    WHILE length(temp_input) > 0 DO
-        if instr(temp_input, delimiter) > 0 then
-            slice[:cnt] = substr_before(temp_input,delimiter);
-            temp_input = substr_after(temp_input,delimiter);
-            cnt = :cnt + 1;
-        else
-            slice[:cnt] = temp_input;
-            break;
-        end if;
-    END WHILE;
-    tab2 = UNNEST(:slice) AS (VAR_LIST);
-    return select VAR_LIST from :tab2;
+
+declare vfilt_Kunde nvarchar (5000); --Deklaration Hilfsvariable
+ 
+ vfilt_Kunde:=  replace(:IP_MEIN_KUNDE , char(39), '') ;
+
+return   
+    select  
+          "SID",
+          "UID" as "KUND",
+          "PID",
+          "VK_WERT_BILL"
+        
+    from  "SALES"
+     where "UID" in(select "VAR_LIST" from "MULTIPLE_VAR_INLIST"(:vfilt_Kunde,','));
+     
 END; 
+
