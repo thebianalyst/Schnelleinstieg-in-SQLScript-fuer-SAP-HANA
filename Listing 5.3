@@ -1,4 +1,4 @@
---Prozedur mit VAriablen optimiert
+--Prozedur mit Variablen optimiert
 CREATE PROCEDURE PROC_VARIABLE (IN var1 INT, IN var2 INT, OUT tab1 "SALES", OUT tab2 "SALES")
 
     LANGUAGE SQLSCRIPT
@@ -8,9 +8,9 @@ CREATE PROCEDURE PROC_VARIABLE (IN var1 INT, IN var2 INT, OUT tab1 "SALES", OUT 
 BEGIN
 --GANZ schlecht
 tab1 = SELECT * FROM SALES; 
---schon Besser
+--schon besser
 tab2 = SELECT * FROM SALES 
 WHERE UID > :var1   OR UID = :var2; 
---am Besten, dann muss aber die Ausgabestruktur auch angepasst werden oder dynamisiert werden
+--am besten, dann muss aber die Ausgabestruktur auch angepasst oder dynamisiert werden
 --tab3 = Select UID, PID FROM SALES WHERE UID > :var1  OR UID = :var2; 
 END;
