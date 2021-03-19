@@ -5,12 +5,12 @@ CREATE PROCEDURE "MY_GET_TABSCHEMA" ( IN p_tabname varchar(256), OUT p_sys nvarc
    DEFAULT SCHEMA "MEIN_SCHEMA"
    READS SQL DATA AS
    
--- Liest HANA Schema für angegebene Tabelle aus und liefert Schema und Tabellenname als String
+--Liest HANA-Schema für angegebene Tabelle aus und liefert Schema- und Tabellenname als String
 BEGIN
-	DECLARE LV_PHYS nvarchar(256);
+      DECLARE LV_PHYS nvarchar(256);
   t = SELECT * FROM "_SYS_BI"."M_SCHEMA_MAPPING" where AUTHORING_SCHEMA = 'ABAP';
     select PHYSICAL_SCHEMA into LV_PHYS  from :t;
-   p_sys = concat('"',concat(:LV_PHYS,'"."'));    --eg "SAPP01"."
+   p_sys = concat('"',concat(:LV_PHYS,'"."'));    --z. B. "SAPP01"."
    p_sys = concat(p_sys,concat(:p_tabname,'"'));  --z. B. "SAPP01"."MyTable"
 
 END;
