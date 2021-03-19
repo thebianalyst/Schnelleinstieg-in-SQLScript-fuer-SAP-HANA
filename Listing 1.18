@@ -1,4 +1,0 @@
-select UID, DATUM, PID, sum(VK_WERT_LOC),
-  rank() over ( partition by DATUM,PID order by UID desc) as "Ranking"
-     from SALES
-     group by UID, DATUM, PID
