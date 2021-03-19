@@ -1,29 +1,26 @@
---Hinweis... OHNE Angabe eines Schemas, wird das folgende Beispiel in Ihrem persönlischen Schema angelegt (default der HANA)
+--Hinweis: OHNE Angabe eines Schemas wird das folgende Beispiel in Ihrem persönlichen Schema angelegt (Default der HANA)
 
--- Step1 --Definition eines Tabellen Typs für den Aufruf der Prozedur in Step2
+-- Step1 --Definition eines Tabellentyps für den Aufruf der Prozedur in Step2
 
-	create type tt_products as table (
-	PID integer,
-	SUBTYPE nvarchar(20),
-	TEXT nvarchar(200) 
-	);
+      create type tt_products as table (
+      PID integer,
+      SUBTYPE nvarchar(20),
+      TEXT nvarchar(200) 
+      );
 
--- Step2 --Definition einer Prozedur zum Auslesen aud der Product Tabelle via Tabellentyp (Step1)
+-- Step2 --Definition einer Prozedur zum Auslesen aus der PRODUCT-Tabelle via Tabellentyp (Step1)
 
 CREATE PROCEDURE get_products ( in im_color nvarchar(20), out ex_products tt_products )
        LANGUAGE SQLSCRIPT
        SQL SECURITY INVOKER
        READS SQL DATA AS   
 BEGIN
---logic der Prozedur
+--Logik der Prozedur
 ex_products = select "PID", "SUBTYPE", "TEXT"
-
-                 from "PRODUCT"
-
-                       where "COLOR" like im_color; 
+               from "PRODUCT"
+                where "COLOR" like im_color;
 
 END;
-
 
 --Aufruf der Prozedur für Rückgabe der Werte je Eingangsparameter
 call get_products ('Rot',?)
