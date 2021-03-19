@@ -1,4 +1,4 @@
---Dynamische Monatsende Ermittlung
+--Dynamische Ermittlung des Monatsendes 
 PROCEDURE "MY_GET_MONTH_END" (IN P_DATUM char(8), OUT P_DATUMABSCHLUSS date) 
    LANGUAGE SQLSCRIPT
    SQL SECURITY INVOKER
@@ -7,7 +7,7 @@ PROCEDURE "MY_GET_MONTH_END" (IN P_DATUM char(8), OUT P_DATUMABSCHLUSS date)
 BEGIN
 
 /***************************** 
-       Write your procedure logic 
+       Hier kommt Ihr Code
  *****************************/
 
 DECLARE lv_datum_heute date ;
