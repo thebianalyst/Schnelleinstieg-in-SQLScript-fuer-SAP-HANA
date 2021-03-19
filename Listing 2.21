@@ -1,9 +1,32 @@
-loop at SOURCE_PACKAGE   assigning <source_fields> 
-«Wenn gewünschter Wert gefunden Verändere Wert
-         If <source_fields>- CALDAY = '11000101'.
-         
-         <source_fields>-CALDAY = '20200821'
-         Else.
-         <source_fields>-CALDAY = sy-datum.
-         Endif.
-endloop 
+CLASS zmy_cds_class DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    INTERFACES if_amdp_marker_hdb.
+      class-METHODS: GET_SALES_DATA FOR TABLE FUNCTION Z_MY_CDS_TAB_FUNC_V.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS zmy_cds_class IMPLEMENTATION.
+    METHOD GET_SALES_DATA by DATABASE FUNCTION FOR HDB LANGUAGE SQLSCRIPT
+    options READ-ONLY.
+    return
+    SELECT 
+     '002' as "MANDT",
+     S.DATUM,
+     S.UID,
+     S.PID,
+     S.VK_WERT_LOC,
+     K.VORNAME || ' ' || K.NACHNAME as "NAME"
+    FROM "MY_SCHEMA"."SALES" as S
+    JOIN "MY_SCHEMA"."KUNDE" as K
+    ON S.UID = K.UID;
+    
+    ENDMETHOD.
+ENDCLASS.
+
