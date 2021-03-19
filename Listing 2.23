@@ -1,24 +1,9 @@
-METHOD PROCEDURE BY DATABASE PROCEDURE FOR HDB LANGUAGE SQLSCRIPT OPTIONS READ-ONLY .
-
-declare lv_count_intab bigint;
-declare i bigint;
---ab HANA 2.0 könnte auch die ANzahl mit RECORD_COUNT( :INTAB ) erfolgen
-select count( * ) into lv_count_intab from :intab;
-
-        --for i IN 0 .. :lv_count_intab-1 DO  -- Loop Beginn
-        for i IN 0 .. 2-1 DO  -- Loop Beginn
-         IT_result =
-           SELECT *
-           FROM :INTAB
-           LIMIT 1 OFFSET :i; -- Info OFFSET indexes beginnen mit 0, nicht 1
---mache etwas mit den daten von IT_RESULT dann append an evtl. 2. interne Tabelle oder OUTTAB
---DAS ganze Konstrukt ist ABER NICHT WIRKLICH HANA KONFORM!!!
-
-       END FOR;
-
-
-outtab = Select * from :it_result;
-
-ERRORTAB = SELECT '' AS ERROR_TEXT, '' AS SQL__PROCEDURE__SOURCE__RECORD FROM DUMMY WHERE DUMMY <> 'X';
-ENDMETHOD.
-ENDCLASS.
+outtab =
+select ( case CALDAY
+          when '20191119' THEN '20200821'
+          else to_varchar( CURRENT_DATE, 'YYYYMMDD' )
+         end) as CALDAY,
+       TCTREQUID, TCTIFCUBE, TCTRQCSTA, TCTRQSTRNO, TIME,
+       TCTSYSID, TCTOBJVERS, TCTRECBST, TCTMNRECO, RECORD,
+       RECORDTP,  SQL__PROCEDURE__SOURCE__RECORD
+       from :intab;
