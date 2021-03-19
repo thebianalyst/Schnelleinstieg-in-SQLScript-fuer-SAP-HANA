@@ -5,25 +5,26 @@ CREATE PROCEDURE PROC_IS_EMPTY ( out o_Count integer)
     READS SQL DATA AS  
      
     BEGIN
-	    it_table = 
-	    SELECT 
-	    PID as "Artikelnummer" , 
-	    COUNT(*) as "Anzahl Kunden pro Produkt",
-	     'von' as "von",
-	     (SELECT COUNT(*) FROM KUNDE) as "Summe Kunde"
-	     FROM SALES AS S, 
-	     KUNDE AS K
-	     WHERE S.UID = K.UID
-	     GROUP BY PID ;
-	
--- mache nur weiter wenn überhautp ein Ergebnis vorhanden
-	    IF IS_EMPTY(:it_table) THEN  
+          it_table = 
+          SELECT 
+          PID as "Artikelnummer" , 
+          COUNT(*) as "Anzahl Kunden pro Produkt",
+          'von' as "von",
+          (SELECT COUNT(*) FROM KUNDE) as "Summe Kunde"
+          FROM SALES AS S, 
+          KUNDE AS K
+          WHERE S.UID = K.UID
+          GROUP BY PID ;
+
+--Mache nur weiter, wenn überhaupt ein Ergebnis vorhanden
+          IF IS_EMPTY(:it_table) THEN  
 --Kein Ergebnis, dann stoppe jegliche Weiterverarbeitung der Prozedur
-	     RETURN;  
-	     ELSE
-	     o_count= '222';  --Wert nur als Beispiel; siehe RECORD COUNT
+          RETURN;  
+          ELSE
+          o_count= '222';  --Wert nur als Beispiel; siehe RECORD COUNT
   
--- RECORD_COUNT ab HANA 2.0	
+--RECORD_COUNT ab HANA 2.0
 --o_count:=RECORD_COUNT(:it_table); 
-	    END IF;
+          END IF;
 END;
+
