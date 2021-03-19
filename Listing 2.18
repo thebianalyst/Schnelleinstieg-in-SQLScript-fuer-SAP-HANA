@@ -1,10 +1,4 @@
---Annotation CDS Table Function
-@AccessControl.authorizationCheck: #CHECK
-@EndUserText.label: 'My CDS  Table function'
-@Analytics.dataCategory: #CUBE
-
-define table function Z_MY_CDS_TAB_FUNC_V
-
-returns{
-    
-}
+@Analytics: {dataCategory: #FACT,dataExtraction.enabled: true}
+@Analytics.dataExtraction.delta.byElement.name: 'lastChangedAt'
+@Analytics.dataExtraction.delta.byElement.maxDelayInSeconds: 100
+@Analytics.dataExtraction.delta.byElement.detectDeletedRecords: true
