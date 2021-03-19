@@ -1,12 +1,12 @@
---Tabelle für Windows Funktionen
-drop table WIND_FUNC;
- create table WIND_FUNC (Land char(2), "Alter" int, offset int);
- insert into WIND_FUNC values('DE', 55, 1);
- insert into WIND_FUNC values('DE', 66, 2);
- insert into WIND_FUNC values('DE', 55, null);
- insert into WIND_FUNC values('DE', 15, 2);
- insert into WIND_FUNC values('DE', 10, 0);
- insert into WIND_FUNC values('IT', 55, 1);
- insert into WIND_FUNC values('IT', 15, 2);
- insert into WIND_FUNC values('IT', 22, 3);
- insert into WIND_FUNC values('GB', 73, 1);
+--Einige Window Functions
+select Land, "Alter", offset,
+  ROW_NUMBER() over (partition by Land order by "Alter" asc) as "Zeilennummer",
+    PERCENT_RANK() OVER (ORDER BY "Alter" ASC)   as "Durchscnitt in%",
+  RANK() over (partition by Land,"Alter" order by offset desc) as "Ranking",  
+  DENSE_RANK() over (partition by Land order by "Alter") as "Ranking Ohne Gaps",
+    LEAD("Alter") over (partition by Land order by "Alter") as "Nachfolger",
+  LEAD("Alter",offset,-"Alter") over (partition by Land order by "Alter") as"Nachfolger über Offset",
+  LAG("Alter") over (partition by Land order by "Alter") as "Vorgänger",
+  LAG("Alter",offset,-"Alter") over (partition by Land order by "Alter") as "Vorgänger über Offset"
+ from WIND_FUNC
+
