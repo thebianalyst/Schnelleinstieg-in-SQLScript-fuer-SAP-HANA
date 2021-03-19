@@ -1,4 +1,7 @@
-@Analytics: {dataCategory: #FACT,dataExtraction.enabled: true}
-@Analytics.dataExtraction.delta.byElement.name: 'lastChangedAt'
-@Analytics.dataExtraction.delta.byElement.maxDelayInSeconds: 100
-@Analytics.dataExtraction.delta.byElement.detectDeletedRecords: true
+@AbapCatalog.sqlViewName: 'ZMY_CDS_VIEW'
+@AbapCatalog.compiler.compareFilter:true
+@Analytics.dataCategory:#CUBE
+@AbapCatalog.preserveKey:true
+@AccessControl.authorizationCheck:false
+@EndUserText.label:'Test für HANA CDS-View'
+
