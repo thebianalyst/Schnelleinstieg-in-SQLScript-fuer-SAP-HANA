@@ -1,31 +1,16 @@
-CLASS zmy_cds_class DEFINITION
-  PUBLIC
-  FINAL
-  CREATE PUBLIC .
+@AccessControl.authorizationCheck: #CHECK
+@EndUserText.label: 'My CDS Table function'
+@Analytics.dataCategory: #CUBE
 
-  PUBLIC SECTION.
-    INTERFACES if_amdp_marker_hdb.
-      class-METHODS: GET_SALES_DATA FOR TABLE FUNCTION Z_MY_CDS_TAB_FUNC_V.
-  PROTECTED SECTION.
-  PRIVATE SECTION.
-ENDCLASS.
+define table function Z_MY_CDS_TAB_FUNC_V
 
+returns{
+       MANDT: abap.clnt;--MANDANTENABHÄNGIG?
+       DATUM: abap.dats;
+       UID: abap.int1;
+       PID: abap.int1;
+       VK_WERT_LOC: abap.curr( 17, 2 );
+       NAME: abap.char( 100 );
+      }
 
-
-CLASS zmy_cds_class IMPLEMENTATION.
-    METHOD GET_SALES_DATA by DATABASE FUNCTION FOR HDB LANGUAGE SQLSCRIPT
-    options READ-ONLY.
-    return
-    SELECT 
-    '002' as "MANDT",
-    S.DATUM,
-    S.UID,
-    S.PID,
-    S.VK_WERT_LOC,
-     K.VORNAME ||' ' || K.NACHNAME as "NAME"
-    FROM "MY_SCHEMA"."SALES" as S
-    JOIN "MY_SCHEMA"."KUNDE" as K
-    ON S.UID = K.UID;
-    
-    ENDMETHOD.
-ENDCLASS.
+implemented by method zmy_cds_class=>GET_SALES_DATA;
