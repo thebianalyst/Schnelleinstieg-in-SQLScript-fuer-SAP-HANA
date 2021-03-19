@@ -1,5 +1,7 @@
-select UID, NULL, NULL, sum(VK_WERT_LOC) from SALES group by UID
-union all
- select NULL, DATUM, NULL, sum(VK_WERT_LOC) from SALES group by DATUM
-union all
- select NULL, NULL, PID, sum(VK_WERT_LOC) from SALES group by PID;
+select UID, DATUM, PID, sum(VK_WERT_LOC)
+     from SALES
+     group by grouping sets 
+     (
+      (UID, DATUM, PID)
+     );
+
