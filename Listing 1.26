@@ -1,7 +1,0 @@
-SELECT node_id
- FROM HIERARCHY (SOURCE ( SELECT EVENTP_GREEN AS node_id, EVENTP_START AS parent_id FROM RSPCCHAIN )
-                  START WHERE EVENTP_GREEN = '4ERB8V7DS5MAEGANKAMVYWAIM'
-                  DEPTH 2
-                   ORPHAN IGNORE )
- WHERE hierarchy_level > 1
- ORDER BY node_id;
