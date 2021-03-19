@@ -1,2 +1,23 @@
-select UID, DATUM, PID, sum(VK_WERT_LOC)
-from SALES group by grouping sets MULTIPLE RESULTSETS ( (UID, DATUM), (PID) )
+--Anlegen der Demo-Tabelle
+insert into SALES_DATE values ('BIANALYST','20200821','22.50');
+create column table SALES_DATE (
+Produkt  nvarchar(30),
+Date     date,
+Value  dec(17,2)
+);
+--Einfügen eines Datensatzes
+insert into SALES_DATE values ('BIANALYST','20200821','22.50');
+--Ausgabe des Satzes mit Datumskonvertierung
+(select *, TO_VARCHAR(Date,'DD.MM.YY')  from SALES_DATE
+UNION
+select *, TO_VARCHAR(Date,'DD.MM.YYYY') from SALES_DATE
+UNION
+select *, TO_VARCHAR(Date,'MM/DD/YYYY') from SALES_DATE
+UNION
+select *, TO_VARCHAR(Date,'YYYY-MM')    from SALES_DATE
+UNION
+select *, TO_VARCHAR(Date,'YYYY-MM-DD') from SALES_DATE
+UNION
+select *, TO_VARCHAR(Date,'YYYY/MM/DD') from SALES_DATE
+UNION
+select *, TO_VARCHAR(TO_DATE(Date),'YYYY/MM/DD')  from SALES_DATE);
