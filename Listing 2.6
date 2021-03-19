@@ -1,4 +1,3 @@
---Prozedur Rumpfprogramm
 CREATE PROCEDURE "MEIN_SCHEMA"."MEIN_PROZEDUR_NAME" 
 (
 in  i_MEIN_PARAM1 NVARCHAR(3)
@@ -6,13 +5,13 @@ out o_MEIN_PARAM2 NVARCHAR(3)
 )
 
 LANGUAGE SQLSCRIPT SQL 
-SECURITY INVOKER  --wird mit der Berechtigung des ausführenden aufgerufen
+SECURITY INVOKER  --Wird mit der Berechtigung des Ausführenden aufgerufen
 
 DEFAULT SCHEMA "MEIN_SCHEMA"
    READS SQL DATA AS
    --AS
 BEGIN
 
---ab hier kommt Ihr Coding für die Funktionalität
+--Ab hier kommt Ihr Coding für die Funktionalität
 
 END;
