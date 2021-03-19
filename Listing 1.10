@@ -1,13 +1,36 @@
-CREATE PROCEDURE My_Demo_Proc (OUT o_param INT) 
-LANGUAGE SQLSCRIPT 
-READS SQL DATA AS
-BEGIN
-	DECLARE V_1 int;
-	DECLARE V_2 int = 0;
-	DECLARE V_3 int DEFAULT 0;
-      
-       t = select * from SALES ;
-       select count(*) into V_1 from :t;
-       V_2 = :V_1 + 1;
-       o_param = :V_2 + :V_3;
-END;
+CREATE COLUMN TABLE "MY_TRFN_FORM_CHECK" as 
+(SELECT DISTINCT
+trfn.TRANID,
+trfn.OBJSTAT,
+trfn.SOURCETYPE,
+trfn.SOURCENAME,
+trfn.TARGETTYPE,
+trfn.TARGETNAME,
+rule.RULEID,
+rule.RULETYPE,
+--Formatierung SAP Präfix
+
+CASE left(form.TYPE,2)  
+ WHEN '/B' THEN right(form.TYPE,length(form.TYPE) -7)
+ ELSE form.TYPE
+ END  AS "Infoobject",
+
+form.valid,
+cast (form.formula as nvarchar(500)) as "FORMEL"
+
+from "IHR_SAPBW_SCHEMA"."RSTRAN" as trfn
+
+join " IHR_SAPBW_SCHEMA "."RSTRANRULE" as rule
+on  trfn.TRANID = rule.TRANID 
+
+join " IHR_SAPBW_SCHEMA "."RSTRANSTEPROUT" as rout
+on  trfn.TRANID = rule.TRANID 
+
+join " IHR_SAPBW_SCHEMA "."RSFOBUEV000" as form
+
+on form.formid = rout.CODEID
+
+WHERE trfn.objvers = 'A'
+AND rule.ruletype = 'FORMULA'
+AND "FORMEL" like '%INITIAL%SKIP%'
+)
