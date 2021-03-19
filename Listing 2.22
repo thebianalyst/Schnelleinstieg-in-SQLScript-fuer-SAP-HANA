@@ -1,7 +1,9 @@
-outtab =
-select ( case CALDAY
-          when '20191119' THEN '20200821'
-          else to_varchar( CURRENT_DATE, 'YYYYMMDD' )
-         end) as CALDAY,
-      TCTREQUID, TCTIFCUBE, TCTRQCSTA, TCTRQSTRNO, TIME, 	TCTSYSID, TCTOBJVERS, TCTRECBST, TCTMNRECO, RECORD, 	RECORDTP,  SQL__PROCEDURE__SOURCE__RECORD
-       from :intab;
+loop at SOURCE_PACKAGE   assigning <source_fields> 
+--Wenn gewünschter Wert gefunden, dann verändere Wert
+         If <source_fields>- CALDAY = '11000101'.
+         
+         <source_fields>-CALDAY = '20200821'
+         Else.
+         <source_fields>-CALDAY = sy-datum.
+         Endif.
+endloop 
