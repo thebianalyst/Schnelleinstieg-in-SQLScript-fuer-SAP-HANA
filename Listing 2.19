@@ -1,16 +1,10 @@
+--Annotation CDS Table Function
 @AccessControl.authorizationCheck: #CHECK
-@EndUserText.label: 'My CDS  Table function'
+@EndUserText.label: 'My CDS Table function'
 @Analytics.dataCategory: #CUBE
 
 define table function Z_MY_CDS_TAB_FUNC_V
 
 returns{
-    MANDT: abap.clnt;--MANDANTENABHÄNGIG?
-    DATUM: abap.dats;
-    UID: abap.int1;
-    PID: abap.int1;
-    VK_WERT_LOC: abap.curr( 17, 2 );
-    NAME: abap.char( 100 );
-    }
-
-implemented by method zmy_cds_class=>GET_SALES_DATA;
+    
+}
