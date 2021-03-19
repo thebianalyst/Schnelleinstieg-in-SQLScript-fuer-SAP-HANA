@@ -1,37 +1,13 @@
---Setze den Anwender-Mandanten in HANA
-CREATE PROCEDURE "SET_USER_CLIENT" (in pCLIENT NVARCHAR(3))
+i = 100;
 
-LANGUAGE SQLSCRIPT SQL 
-SECURITY INVOKER 
+IF :i <= 1000 
+  THEN   --mache irgendetwas
+x := :i + 1;
 
---DEFAULT SCHEMA "MY_SCHEMA"
- AS
-BEGIN
-/***************************** 
-	Set Default Session Client = '002' to all available users 
- *****************************/
-DECLARE LV_USER_COUNT integer;
-DECLARE LV_SQL VARCHAR(299);
-DECLARE LV_USER_NAME varchar(30);
-DECLARE I Integer;
- 
- --Anzahl der Anwender / User für den Loop
-SELECT COUNT(*) INTO LV_USER_COUNT FROM "SYS"."USERS";
+ELSE     --mache etwas anderes
+x := :i *2;
 
---Auslesen aller User für die Bearbeitung
-t1= select USER_NAME from "SYS"."USERS";
-       --Loop von 1 bis Anzahl der User
-       FOR i IN 0 .. :LV_USER_COUNT-1 DO  -- Loop Beginn
-         
-           SELECT "USER_NAME"
-           INTO LV_USER_NAME
-           FROM :T1
-           LIMIT 1 OFFSET :i; -- Info OFFSET indexes beginnen mit 0, nicht 1
---Aufbau des Dynamischen SQLScript (Siehe auch Kapitel Performance :) )
-       LV_SQL := 'ALTER USER ' || LV_USER_NAME || ' SET PARAMETER "CLIENT" = ''' || pCLIENT || '''' ;
-     --update  der User Parameter des einzelnen Loop Users via Dynamischem EXEC SQL 
-       EXEC (:LV_SQL); 
-           
-END FOR;  -- Ende des Loops
-	 
-END;
+--ELSEIF – wenn noch weitere Abfragen stattfinden sollen
+
+END IF;
+
