@@ -1,12 +1,13 @@
-i = 100;
-
-IF :i <= 1000 
-  THEN   --mache irgendetwas z.B. Parameter +1
-x := :i + 1;
-
-ELSE     --mache etwas anderes z.B. Parameter multipliziert mit 2
-x := :i *2;
-
---ELSEIF    Wenn noch weitere Abfragen stattfinden sollen
-
-END IF;
+CREATE PROCEDURE My_Demo_Proc (OUT o_param INT) 
+LANGUAGE SQLSCRIPT 
+READS SQL DATA AS
+BEGIN
+DECLARE V_1 int;
+      DECLARE V_2 int = 0;
+      DECLARE V_3 int DEFAULT 0;
+      
+       t = select * from SALES ;
+       select count(*) into V_1 from :t;
+       V_2 = :V_1 + 1;
+       o_param = :V_2 + :V_3;
+END;
