@@ -1,4 +1,12 @@
-select UID, DATUM, PID, sum(VK_WERT_LOC),
-  rank() over ( partition by DATUM,PID order by UID desc) as "Ranking"
-     from SALES
-     group by UID, DATUM, PID
+--Tabelle für Window Functions
+drop table WIND_FUNC;
+ create table WIND_FUNC (Land char(2), "Alter" int, offset int);
+ insert into WIND_FUNC values('DE', 55, 1);
+ insert into WIND_FUNC values('DE', 66, 2);
+ insert into WIND_FUNC values('DE', 55, null);
+ insert into WIND_FUNC values('DE', 15, 2);
+ insert into WIND_FUNC values('DE', 10, 0);
+ insert into WIND_FUNC values('IT', 55, 1);
+ insert into WIND_FUNC values('IT', 15, 2);
+ insert into WIND_FUNC values('IT', 22, 3);
+ insert into WIND_FUNC values('GB', 73, 1);
