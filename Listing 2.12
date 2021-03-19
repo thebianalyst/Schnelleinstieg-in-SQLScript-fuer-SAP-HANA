@@ -1,6 +1,6 @@
---Perioden / Monate zwischen von- bis Datum
+--Perioden/Monate zwischen von-bis Datum
 CREATE FUNCTION "MY_PERIODS_IN_BETWEEN" (
-	            IN i_START_PER VARCHAR(10), IN i_END_PER VARCHAR(10))
+                  IN i_START_PER VARCHAR(10), IN i_END_PER VARCHAR(10))
                 RETURNS RESULT VARCHAR(255)
                 LANGUAGE SQLSCRIPT
                 SQL SECURITY INVOKER
@@ -22,10 +22,10 @@ BEGIN
                                 THEN 
                                                 IF :i_mon_idx = :iCount_Month
                                                 THEN 
-                                                                v_temp := ''''||:i_START_PER ||',';
+                                                            v_temp := ''''||:i_START_PER ||',';
                                                 ELSE 
-                                                                v_temp := :i_START_PER||',';
-                                                END IF;                                
+                                                            v_temp := :i_START_PER||',';
+                                                END IF;    
                                 ELSEIF :i_mon_idx = iCount_Month
                                 THEN 
                                                 v_temp := :v_temp||:i_END_PER;
