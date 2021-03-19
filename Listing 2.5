@@ -1,9 +1,17 @@
-FUNCTION "MY_SCALAR_FUNCTION" (in i_input int, in i_multi integer ) 
+CREATE PROCEDURE "MEIN_SCHEMA"."MEIN_PROZEDUR_NAME" 
+(
+in  i_MEIN_PARAM1 NVARCHAR(3)
+out o_MEIN_PARAM2 NVARCHAR(3)
+)
 
-    RETURNS o_result int –-Rückgabe der Funktion
-    LANGUAGE SQLSCRIPT
-    SQL SECURITY INVOKER AS
+LANGUAGE SQLSCRIPT SQL 
+SECURITY INVOKER  --Wird mit der Berechtigung des Ausführenden aufgerufen
+
+DEFAULT SCHEMA "MEIN_SCHEMA"
+   READS SQL DATA AS
+   --AS
 BEGIN
-/*******Logik Beginn**********/
- o_result := :i_input * :i_multi; --Ergebnis der Multiplikation
+
+--Ab hier kommt Ihr Coding für die Funktionalität
+
 END;
