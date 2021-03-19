@@ -1,13 +1,13 @@
---Prozedur zur Ermittlung von TVARVC Werten
+--Prozedur zur Ermittlung von TVARVC-Werten
 PROCEDURE "MY_GET_TVARVC_VALUE" ( 
-		IN  pNAME VARCHAR(30), 
-		OUT pSIGN VARCHAR(1), 
-		OUT pOPTI VARCHAR(2), 
-		OUT pLOW VARCHAR(255), 
-		OUT pHIGH VARCHAR(255),
-		OUT pEX_MESSAGE nvarchar(200)
-	)
-	
+        IN  pNAME VARCHAR(30), 
+        OUT pSIGN VARCHAR(1), 
+        OUT pOPTI VARCHAR(2), 
+        OUT pLOW VARCHAR(255), 
+        OUT pHIGH VARCHAR(255),
+        OUT pEX_MESSAGE nvarchar(200)
+        )
+
 LANGUAGE SQLSCRIPT
  SQL SECURITY INVOKER 
  DEFAULT SCHEMA "MEIN_SCHEMA"
@@ -15,58 +15,59 @@ LANGUAGE SQLSCRIPT
 
 BEGIN
 
-	DECLARE LV_SYS NVARCHAR(256);
-	DECLARE LV_SIGN VARCHAR(1);
-	DECLARE LV_OPTI VARCHAR(2);
-	DECLARE LV_LOW VARCHAR(255);
-	DECLARE LV_HIGH VARCHAR(255);
-	DECLARE LV_SQL VARCHAR(299);
-	
-	
-	--definition exeption handling mit Return Wert für procedure
-	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    DECLARE LV_SYS NVARCHAR(256);
+    DECLARE LV_SIGN VARCHAR(1);
+    DECLARE LV_OPTI VARCHAR(2);
+    DECLARE LV_LOW VARCHAR(255);
+    DECLARE LV_HIGH VARCHAR(255);
+    DECLARE LV_SQL VARCHAR(299);
+
+
+--Definition exeption handling mit Return-Wert für procedure
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
      BEGIN
       pex_message := 'SQL Exception occured. Error Code is: ' || ::SQL_ERROR_CODE || ' Error message is: ' || ::SQL_ERROR_MESSAGE;
-     	drop TABLE #my_TVARVC ;
+      drop TABLE #my_TVARVC ;
      END;
--- Da temporäre Tabellen in HANA SQLScript Prozeduren nicht erlaubt sind, 
--- generieren wir eine echte Tabelle und werfen diese am Ende der Prozedur wieder weg
+--Da temporäre Tabellen in HANA-SQLScript-Prozeduren nicht erlaubt sind, 
+--generieren wir eine echte Tabelle und werfen diese am Ende der Prozedur wieder weg
 
---Erstellen der temporären Tabelle	
+--Erstellen der temporären Tabelle
 create local temporary table #my_TVARVC(
-		MANDT NVARCHAR(3),
-		NAME VARCHAR(30),
-		TYPE VARCHAR(1),
-		NUMB NVARCHAR(4),
-		SIGN VARCHAR(1),
-		OPTI VARCHAR(2),
-		LOW VARCHAR(255),
-		HIGH VARCHAR(255),
-		CLIE_INDEP VARCHAR(1)
-	);
-	CALL "MY_GET_TABSCHEMA"('TVARVC',:LV_SYS);           --SQL Statement als String zusammensetzen mit concatenate(PIPE) und dem gerade ermittelten Schema Namen
-	lv_sql = 'INSERT into #my_TVARVC ( SELECT * FROM ' || LV_SYS || ' WHERE NAME = ''' || PNAME || ''')';
-	--SQL Ausführen
+        MANDT NVARCHAR(3),
+        NAME VARCHAR(30),
+        TYPE VARCHAR(1),
+        NUMB NVARCHAR(4),
+        SIGN VARCHAR(1),
+        OPTI VARCHAR(2),
+        LOW VARCHAR(255),
+        HIGH VARCHAR(255),
+        CLIE_INDEP VARCHAR(1)
+        );
+        CALL "MY_GET_TABSCHEMA"('TVARVC',:LV_SYS);           
+--SQL-Statement als String zusammensetzen mit Concatenate (PIPE) und dem gerade ermittelten Schemanamen
+    lv_sql = 'INSERT into #my_TVARVC ( SELECT * FROM ' || LV_SYS || ' WHERE NAME = ''' || PNAME || ''')';
+    --SQL ausführen
 EXEC (:LV_SQL);
-   --lese die Werte aus der internen TMP Tabelle aus
+   --Lies die Werte aus der internen TMP-Tabelle aus
 
-	SELECT SIGN
-		INTO LV_SIGN
-		FROM #my_TVARVC;
-	SELECT OPTI
-		INTO LV_OPTI
-		FROM #my_TVARVC;
-	SELECT LOW
-		INTO LV_LOW
-		FROM #my_TVARVC;
-	SELECT HIGH
-		INTO LV_HIGH
-		FROM #my_TVARVC;
-	--return vaulues to outer params	
-	pSIGN = :LV_SIGN;
-	pOPTI = :LV_OPTI;
-	pLOW = :LV_LOW;
-	pHIGH = :LV_HIGH;
-	--To avoid further problems. drop the "temporary" table
-	drop TABLE #my_TVARVC ;
+    SELECT SIGN
+        INTO LV_SIGN
+        FROM #my_TVARVC;
+    SELECT OPTI
+        INTO LV_OPTI
+        FROM #my_TVARVC;
+    SELECT LOW
+        INTO LV_LOW
+        FROM #my_TVARVC;
+    SELECT HIGH
+        INTO LV_HIGH
+        FROM #my_TVARVC;
+    --Rückgabe der Werte an die Ausgabeparameter
+    pSIGN = :LV_SIGN;
+    pOPTI = :LV_OPTI;
+    pLOW = :LV_LOW;
+    pHIGH = :LV_HIGH;
+    --Um Probleme zu vermeiden, wird die TMP-Tabelle gelöscht
+    drop TABLE #my_TVARVC ;
 END;
